@@ -141,8 +141,7 @@ func (s *ModelStatusService) GetModelStatus(modelName, window string) (map[strin
 		WHERE model_name = ?
 			AND created_at >= ? AND created_at < ?
 			AND type IN (2, 5)
-			AND (code IS NULL OR code != 400)
-
+		
 		GROUP BY FLOOR((created_at - %d) / %d)`,
 		startTime, slotSeconds,
 		startTime, slotSeconds))
