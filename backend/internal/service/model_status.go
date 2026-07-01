@@ -50,7 +50,7 @@ func getStatusColor(successRate float64, totalRequests int64) string {
 	if totalRequests == 0 {
 		return "green" // No requests = no issues
 	}
-	if successRate >= 60 {
+	if successRate >= 80 {
 		return "green"
 	} else if successRate > 10 {
 		return "yellow"
