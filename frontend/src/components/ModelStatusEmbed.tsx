@@ -1704,7 +1704,7 @@ function TokenGroupDropdown({ groups, countMap, value, onChange, styles }: Token
     </div>
   )
 }
-// Token Group Collapsible Component
+// Token Group Collapsible Component 
 function TokenGroupCollapsible({ modelStatuses, tokenGroups, customGroups, groupFilter, theme, styles, onHover, onLeave }: {
   modelStatuses: ModelStatus[]
   tokenGroups: any[]
