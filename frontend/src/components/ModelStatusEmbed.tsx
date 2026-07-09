@@ -1698,7 +1698,7 @@ function TokenGroupCollapsible({ modelStatuses, tokenGroups, customGroups, group
     return group ? embedModelMatchesGroup(model.model_name, group) : true
   })
 
-  // Group models by token group - each group independently lists its models
+  // Group models by token group -- each group independently lists its models
   const groupedByToken: Record<string, typeof filtered> = {}
 
   tokenGroups.forEach(tg => {
