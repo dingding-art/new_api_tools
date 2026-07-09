@@ -1714,19 +1714,35 @@ function TokenGroupCollapsible({ modelStatuses, tokenGroups, customGroups, group
 
 
   return (
-    <div className={cn(theme === 'minimal' ? 'divide-y divide-gray-100' : 'space-y-4')}>
-      {tokenGroupNames.map(tgName => (
-        <details key={tgName} open className="group">
+    <div className={cn(theme === 'minimal' ? 'divide-y divide-gray-100' : 'space-y-3')}>
+      {tokenGroupNames
+        .filter(tgName => tgName !== '测试')
+        .map(tgName => (
+        <details key={tgName} className="group">
           <summary className={cn(
-            "cursor-pointer select-none list-none flex items-center gap-2 py-2 px-1",
-            styles.statsText
+            "cursor-pointer select-none list-none flex items-center justify-between px-5 py-4 rounded-xl border transition-all",
+            theme === 'lavender' && 'bg-white/60 backdrop-blur-sm border-purple-100/80 hover:border-purple-200',
+            theme === 'daylight' && 'bg-white border-slate-200 shadow-sm hover:shadow-md',
+            theme === 'obsidian' && 'bg-[#161b22] border-gray-800/60 hover:border-gray-700',
+            !['lavender', 'daylight', 'obsidian'].includes(theme) && cn(styles.card),
           )}>
-            <ChevronRight className="w-4 h-4 transition-transform group-open:rotate-90" />
-            <span className={cn("font-semibold", styles.modelName)}>{tgName}</span>
-            <span className={cn("text-xs", styles.statsText)}>({groupedByToken[tgName].length})</span>
+            <div className="flex items-center gap-3">
+              <ChevronRight className="w-4 h-4 transition-transform group-open:rotate-90 opacity-60" />
+              <span className={cn("font-semibold text-lg", styles.modelName)}>{tgName}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className={styles.statsText}>{groupedByToken[tgName].length} 模型</span>
+              <span className={cn(
+                "px-3 py-1 text-xs font-medium rounded-full transition-colors",
+                theme === 'lavender' ? 'bg-purple-50 text-purple-600 group-open:bg-purple-100' : 'bg-blue-500/10 text-blue-500 group-open:bg-blue-500/20',
+              )}>
+                <span className="group-open:hidden">点击展开</span>
+                <span className="hidden group-open:inline">点击收起</span>
+              </span>
+            </div>
           </summary>
           <div className={cn(
-            theme === 'minimal' ? 'divide-y divide-gray-100' : 'grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 ml-6'
+            theme === 'minimal' ? 'divide-y divide-gray-100' : 'grid grid-cols-1 lg:grid-cols-2 gap-4 mt-3 px-2'
           )}>
             {groupedByToken[tgName].map(model => (
               <EmbedModelCard
@@ -1760,6 +1776,7 @@ function TokenGroupCollapsible({ modelStatuses, tokenGroups, customGroups, group
       )}
     </div>
   )
+
 }
 
 export default ModelStatusEmbed
