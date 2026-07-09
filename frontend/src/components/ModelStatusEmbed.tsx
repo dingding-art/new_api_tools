@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '../lib/utils'
-import { Loader2, Timer, Activity, Zap, Sun, Moon, Minimize2, Terminal, Leaf, Droplets, Command, LayoutGrid, Bot, MessageSquareQuote, Triangle, Sparkles, CreditCard, GitBranch, Gamepad2, Rocket, Brain, Layers, Tag, KeyRound, ChevronDown } from 'lucide-react'
+import { Loader2, Timer, Activity, Zap, Sun, Moon, Minimize2, Terminal, Leaf, Droplets, Command, LayoutGrid, Bot, MessageSquareQuote, Triangle, Sparkles, CreditCard, GitBranch, Gamepad2, Rocket, Brain, Layers, Tag, KeyRound, ChevronDown,ChevronRight } from 'lucide-react'
 import {
   OpenAI, Gemini, DeepSeek, SiliconCloud, Groq, Ollama, Claude, Mistral,
   Minimax, Baichuan, Moonshot, Spark, Qwen, Yi, Hunyuan, Stepfun, ZeroOne,
@@ -34,7 +34,7 @@ interface ModelStatus {
   slot_data: SlotStatus[]
 }
 
-type ThemeId = 'obsidian' | 'daylight' | 'minimal' | 'neon' | 'forest' | 'ocean' | 'terminal' | 'cupertino' | 'material' | 'openai' | 'anthropic' | 'vercel' | 'linear' | 'stripe' | 'github' | 'discord' | 'tesla'
+type ThemeId = 'obsidian' | 'daylight' | 'minimal' | 'neon' | 'forest' | 'ocean' | 'terminal' | 'cupertino' | 'material' | 'openai' | 'anthropic' | 'vercel' | 'linear' | 'stripe' | 'github' | 'discord' | 'tesla' | 'lavender'
 
 // Token group from abilities table (system-defined)
 interface EmbedTokenGroup {
@@ -204,6 +204,8 @@ export const THEMES: ThemeConfig[] = [
   { id: 'github', name: 'GitHub', nameEn: 'GitHub', icon: GitBranch, description: '开发者之魂，熟悉的深色代码风格' },
   { id: 'discord', name: 'Discord', nameEn: 'Discord', icon: Gamepad2, description: '游戏社区风格，Blurple 品牌色' },
   { id: 'tesla', name: 'Tesla', nameEn: 'Tesla', icon: Rocket, description: '工业未来风，极简黑红配色' },
+  { id: 'lavender', name: '薰衣草', nameEn: 'Lavender', icon: Sparkles, description: '柔和紫色渐变，温暖优雅' },
+
 ]
 
 // Theme-specific styles
@@ -806,7 +808,40 @@ const themeStyles: Record<ThemeId, {
     legendDot: 'w-2 h-2 rounded-none',
     emptyText: 'text-[#444] uppercase tracking-wider',
     loader: 'text-[#e82127]',
+  }, 
+   // ======== LAVENDER (Soft Purple Theme) ==========
+  lavender: {
+    container: 'min-h-screen text-gray-800 p-6 font-sans',
+    background: 'background linear-gradient(180deg, #faf8ff 0%, #f5f0ff 50%, #f0ebfa 100%);',
+    headerTitle: 'text-2xl font-bold text-[#4a3a6b] tracking-tight',
+    headerSubtitle: 'text-sm text-[#7c6f9b] mt-1.5',
+    countdownBox: 'flex items-center gap-2 px-4 py-2.5 text-sm bg-white/70 backdrop-blur-sm border-purple-200/60 rounded-xl shadow-sm',
+    countdownText: 'text-purple-600 font-mono-semibold',
+    countdownLabel: 'text-[#7c6f9b]',
+    card: 'bg-white/80 backdrop-blur-sm border border-purple-100/80 rounded-xl p-5 shadow-sm transition-all duration-300',
+    cardHover: 'hover:shadow-md hover:border-purple-200',
+    modelName: 'font-semibold text-[#3d2e5c] truncate max-w-md',
+    statsText: 'text-sm text-[#7c6f9b]',
+    statsValue: 'text-[#3d2e5c] font-semibold',
+    statusGreen: 'bg-emerald-500',
+    statusYellow: 'bg-amber-500',
+    statusRed: 'bg-rose-500',
+    statusEmpty: 'bg-purple-100',
+    statusHover: 'hover:ring-2 hover:ring-purple-300/50 hover:scale-y-110 origin-bottom',
+    badgeGreen: 'bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 text-xs font-medium rounded-full',
+    badgeYellow: 'bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 text-xs font-medium rounded-full',
+    badgeRed: 'bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 text-xs font-medium rounded-full',
+    timeLabel: 'text-xs text-[#a99bc4] font-mono',
+    tooltip: 'bg-white border-purple-100 rounded-xl shadow-xl p-4 z-[999]',
+    tooltipTitle: 'font-semibold text-[#3d2e5c] mb-3 pb-2 border-b border-purple-50',
+    tooltipLabel: 'text-[#7c6f9b]',
+    tooltipValue: 'text-[#3d2e5c] font-medium',
+    legendText: 'text-xs text-[#7c6f9b]',
+    legendDot: 'w-3 h-3 rounded-full',
+    emptyText: 'text-[#7c6f9b]',
+    loader: 'text-purple-400',
   },
+
 }
 
 // Status labels
@@ -1134,6 +1169,9 @@ export function ModelStatusEmbed({
               theme === 'github' && 'bg-[#161b22] border border-[#30363d] rounded-md',
               theme === 'discord' && 'bg-[#2b2d31] rounded-[4px]',
               theme === 'tesla' && 'bg-[#111] border-t-2 border-[#333]',
+              theme === 'lavender' && 'bg-white/60 backdrop-blur-sm border border-purple-100/80 rounded-xl shadow-sm',
+
+
             )}>
               <div className={cn("flex items-center gap-2", styles.statsText)}>
                 <span>总请求</span>
@@ -1204,6 +1242,8 @@ export function ModelStatusEmbed({
                         theme === 'github' && 'bg-[#58a6ff]/15 border-[#58a6ff]/40 text-[#58a6ff]',
                         theme === 'discord' && 'bg-[#5865F2]/20 border-[#5865F2]/40 text-[#5865F2]',
                         theme === 'tesla' && 'bg-[#e82127]/15 border-[#e82127]/40 text-[#e82127]',
+                        theme === 'lavender' && 'bg-purple-500/15 border-purple-500/40 text-purple-600',
+
                       )
                     : cn(
                         "border-transparent opacity-60 hover:opacity-100",
@@ -1257,38 +1297,24 @@ export function ModelStatusEmbed({
           )
         })()}
 
-        {/* Model Status Cards */}
-        {modelStatuses.length > 0 ? (
-          <div className={cn(
-            theme === 'minimal' ? 'divide-y divide-gray-100' : 'grid grid-cols-1 lg:grid-cols-2 gap-4'
-          )}>
-            {modelStatuses
-              .filter(model => {
-                if (groupFilter === 'all') return true
-                if (groupFilter.startsWith('token:')) {
-                  const tgName = groupFilter.slice(6)
-                  const tg = tokenGroups.find(g => g.group_name === tgName)
-                  return tg ? tg.models.includes(model.model_name) : true
-                }
-                const group = customGroups.find(g => g.id === groupFilter)
-                return group ? embedModelMatchesGroup(model.model_name, group) : true
-              })
-              .map(model => (
-              <EmbedModelCard
-                key={model.model_name}
-                model={model}
-                theme={theme}
-                styles={styles}
-                onHover={handleSlotHover}
-                onLeave={() => setHoveredSlot(null)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className={cn("text-center py-16", styles.emptyText)}>
-            {selectedModels.length === 0 ? '请在管理界面选择要监控的模型' : '暂无模型状态数据'}
-          </div>
-        )}
+              {/* Model Status Cards */}
+      {modelStatuses.length > 0 ? (
+        <TokenGroupCollapsible
+          modelStatuses={modelStatuses}
+          tokenGroups={tokenGroups}
+          customGroups={customGroups}
+          groupFilter={groupFilter}
+          theme={theme}
+          styles={styles}
+          onHover={handleSlotHover}
+          onLeave={() => setHoveredSlot(null)}
+        />
+      ) : (
+        <div className={cn("text-center py-16", styles.emptyText)}>
+          {selectedModels.length === 0 ? '请在管理界面选择要监控的模型' : '暂无模型状态数据'}
+        </div>
+      )}
+
 
         {/* Legend */}
         <div className={cn(
@@ -1674,6 +1700,92 @@ function TokenGroupDropdown({ groups, countMap, value, onChange, styles }: Token
           })}
         </div>,
         document.body
+      )}
+    </div>
+  )
+}
+// Token Group Collapsible Component
+function TokenGroupCollapsible({ modelStatuses, tokenGroups, customGroups, groupFilter, theme, styles, onHover, onLeave }: {
+  modelStatuses: ModelStatus[]
+  tokenGroups: TokenGroup[]
+  customGroups: CustomGroup[]
+  groupFilter: string
+  theme: ThemeId
+  styles: Record<string, string>
+  onHover: (model: string, index: number, el: HTMLElement) => void
+  onLeave: () => void
+}) {
+  const filtered = modelStatuses.filter(model => {
+    if (groupFilter === 'all') return true
+    if (groupFilter.startsWith('token:')) {
+      const tgName = groupFilter.slice(6)
+      const tg = tokenGroups.find(g => g.group_name === tgName)
+      return tg ? tg.models.includes(model.model_name) : true
+    }
+    const group = customGroups.find(g => g.id === groupFilter)
+    return group ? embedModelMatchesGroup(model.model_name, group) : true
+  })
+
+  // Group models by token group
+  const groupedByToken: Record<string, typeof filtered> = {}
+  const ungrouped: typeof filtered = []
+
+  filtered.forEach(model => {
+    const tg = tokenGroups.find(g => g.models.includes(model.model_name))
+    if (tg) {
+      if (!groupedByToken[tg.group_name]) groupedByToken[tg.group_name] = []
+      groupedByToken[tg.group_name].push(model)
+    } else {
+      ungrouped.push(model)
+    }
+  })
+
+  const tokenGroupNames = Object.keys(groupedByToken)
+
+  return (
+    <div className={cn(theme === 'minimal' ? 'divide-y divide-gray-100' : 'space-y-4')}>
+      {tokenGroupNames.map(tgName => (
+        <details key={tgName} open className="group">
+          <summary className={cn(
+            "cursor-pointer select-none list-none flex items-center gap-2 py-2 px-1",
+            styles.statsText
+          )}>
+            <ChevronRight className="w-4 h-4 transition-transform group-open:rotate-90" />
+            <span className={cn("font-semibold", styles.modelName)}>{tgName}</span>
+            <span className={cn("text-xs", styles.statsText)}>({groupedByToken[tgName].length})</span>
+          </summary>
+          <div className={cn(
+            theme === 'minimal' ? 'divide-y divide-gray-100' : 'grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 ml-6'
+          )}>
+            {groupedByToken[tgName].map(model => (
+              <EmbedModelCard
+                key={model.model_name}
+                model={model}
+                theme={theme}
+                styles={styles}
+                onHover={onHover}
+                onLeave={onLeave}
+              />
+            ))}
+          </div>
+        </details>
+      ))}
+      {ungrouped.length > 0 && (
+        <div className={cn(
+          theme === 'minimal' ? 'divide-y divide-gray-100' : 'grid grid-cols-1 lg:grid-cols-2 gap-4',
+          tokenGroupNames.length > 0 && 'mt-4'
+        )}>
+          {ungrouped.map(model => (
+            <EmbedModelCard
+              key={model.model_name}
+              model={model}
+              theme={theme}
+              styles={styles}
+              onHover={onHover}
+              onLeave={onLeave}
+            />
+          ))}
+        </div>
       )}
     </div>
   )
