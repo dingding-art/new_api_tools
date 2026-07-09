@@ -1297,54 +1297,25 @@ export function ModelStatusEmbed({
           )
         })()}
 
-              {/* Model Status Cards */}
-      {modelStatuses.length > 0 ? (
-        <TokenGroupCollapsible
-          modelStatuses={modelStatuses}
-          tokenGroups={tokenGroups}
-          customGroups={customGroups}
-          groupFilter={groupFilter}
-          theme={theme}
-          styles={styles}
-          onHover={handleSlotHover}
-          onLeave={() => setHoveredSlot(null)}
-        />
-      ) : (
-        <div className={cn("text-center py-16", styles.emptyText)}>
-          {selectedModels.length === 0 ? '请在管理界面选择要监控的模型' : '暂无模型状态数据'}
-        </div>
-      )}
-
-
-        {/* Legend */}
-        <div className={cn(
-          "mt-8 flex items-center justify-center gap-6",
-          theme === 'minimal' && 'mt-4 gap-4'
-        )}>
-          {['green', 'yellow', 'red'].map((status) => (
-            <div key={status} className="flex items-center gap-2">
-              <span className={cn(
-                styles.legendDot,
-                status === 'green' ? styles.statusGreen :
-                status === 'yellow' ? styles.statusYellow : styles.statusRed
-              )} />
-              <span className={styles.legendText}>
-                {theme === 'minimal'
-                  ? (status === 'green' ? '≥95%' : status === 'yellow' ? '80-95%' : '<80%')
-                  : (status === 'green' ? '成功率 ≥ 95%' : status === 'yellow' ? '成功率 80-95%' : '成功率 < 80%')
-                }
-              </span>
-            </div>
-          ))}
-          {/* No requests indicator */}
-          <div className="flex items-center gap-2">
-            <span className={cn(styles.legendDot, styles.statusEmpty)} />
-            <span className={styles.legendText}>
-              {theme === 'minimal' ? 'No req' : '无请求'}
-            </span>
+           {/* Model Status Cards   */}      
+        {modelStatuses.length > 0 ? (
+          <TokenGroupCollapsible
+            modelStatuses={modelStatuses}
+            tokenGroups={tokenGroups}
+            customGroups={customGroups}
+            groupFilter={groupFilter}
+            theme={theme}
+            styles={styles}
+            onHover={handleSlotHover}
+            onLeave={() => setHoveredSlot(null)}
+          />
+        ) : (
+          <div className={cn("text-center py-16", styles.emptyText)}>
+            {selectedModels.length === 0 ? '请在管理界面选择要监控的模型' : '暂无模型状态数据'}
           </div>
-        </div>
-      </div>
+        )}
+
+
 
       {/* Global Tooltip */}
       {hoveredSlot && (
@@ -1727,21 +1698,19 @@ function TokenGroupCollapsible({ modelStatuses, tokenGroups, customGroups, group
     return group ? embedModelMatchesGroup(model.model_name, group) : true
   })
 
-  // Group models by token group
+  // Group models by token group - each group independently lists its models
   const groupedByToken: Record<string, typeof filtered> = {}
-  const ungrouped: typeof filtered = []
 
-  filtered.forEach(model => {
-    const tg = tokenGroups.find(g => g.models.includes(model.model_name))
-    if (tg) {
-      if (!groupedByToken[tg.group_name]) groupedByToken[tg.group_name] = []
-      groupedByToken[tg.group_name].push(model)
-    } else {
-      ungrouped.push(model)
+  tokenGroups.forEach(tg => {
+    const models = filtered.filter(m => tg.models.includes(m.model_name))
+    if (models.length > 0) {
+      groupedByToken[tg.group_name] = models
     }
   })
 
   const tokenGroupNames = Object.keys(groupedByToken)
+  const ungrouped: typeof filtered = []
+
 
   return (
     <div className={cn(theme === 'minimal' ? 'divide-y divide-gray-100' : 'space-y-4')}>
