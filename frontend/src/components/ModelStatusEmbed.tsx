@@ -1707,14 +1707,15 @@ function TokenGroupDropdown({ groups, countMap, value, onChange, styles }: Token
 // Token Group Collapsible Component
 function TokenGroupCollapsible({ modelStatuses, tokenGroups, customGroups, groupFilter, theme, styles, onHover, onLeave }: {
   modelStatuses: ModelStatus[]
-  tokenGroups: TokenGroup[]
-  customGroups: CustomGroup[]
+  tokenGroups: any[]
+  customGroups: any[]
   groupFilter: string
   theme: ThemeId
-  styles: Record<string, string>
-  onHover: (model: string, index: number, el: HTMLElement) => void
+  styles: typeof themeStyles.obsidian
+  onHover: (slot: SlotStatus, rect: DOMRect) => void
   onLeave: () => void
 }) {
+
   const filtered = modelStatuses.filter(model => {
     if (groupFilter === 'all') return true
     if (groupFilter.startsWith('token:')) {
